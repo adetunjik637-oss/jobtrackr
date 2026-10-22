@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Cover letters — JobTrackr{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Your cover letters</h1>
+  <a class="btn" href="{% url 'generate_letter' %}">+ New letter</a>
+</div>
+
+{% if letters %}
+  <div class="table-wrap">
+    <table class="table">
+      <thead><tr><th>For</th><th>Tone</th><th>Created</th><th></th></tr></thead>
+      <tbody>
+        {% for l in letters %}
+        <tr>
+          <td>
+            {% if l.job_application %}
+              <strong>{{ l.job_application.job_title }}</strong>
+              <span class="muted small">@ {{ l.job_application.company_name }}</span>
+            {% else %}
+              <span class="muted">{{ l.content|truncatechars:50 }}</span>
+            {% endif %}
+          </td>
+          <td><span class="pill pill-slate">{{ l.get_tone_display }}</span></td>
+          <td class="muted small">{{ l.created_at|date:"M j, Y" }}</td>
+          <td class="text-right"><a class="plain" href="{% url 'letter_detail' l.pk %}">Open</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <div class="card">
+    <p class="muted">No cover letters yet.</p>
+    <a class="btn" href="{% url 'generate_letter' %}">Generate your first</a>
+  </div>
+{% endif %}
+{% endblock %}

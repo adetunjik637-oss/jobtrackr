@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}{% if mode == "edit" %}Edit{% else %}Add{% endif %} application — JobTrackr{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>{% if mode == "edit" %}Edit application{% else %}Add application{% endif %}</h1>
+</div>
+<div class="card" style="max-width:640px;">
+  <form method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <div class="grid grid-2">
+      <p>{{ form.company_name.label_tag }} {{ form.company_name }} {{ form.company_name.errors }}</p>
+      <p>{{ form.job_title.label_tag }} {{ form.job_title }} {{ form.job_title.errors }}</p>
+    </div>
+    <p>{{ form.job_link.label_tag }} {{ form.job_link }} {{ form.job_link.errors }}</p>
+    <p>{{ form.job_description.label_tag }} {{ form.job_description }} {{ form.job_description.errors }}</p>
+    <div class="grid grid-2">
+      <p>{{ form.status.label_tag }} {{ form.status }} {{ form.status.errors }}</p>
+      <p>{{ form.follow_up_date.label_tag }} {{ form.follow_up_date }} {{ form.follow_up_date.errors }}</p>
+    </div>
+    <button class="btn" type="submit">{% if mode == "edit" %}Save changes{% else %}Add application{% endif %}</button>
+    {% if mode == "edit" %}
+      <a class="btn btn-ghost" href="{% url 'application_detail' application.pk %}">Cancel</a>
+    {% else %}
+      <a class="btn btn-ghost" href="{% url 'application_list' %}">Cancel</a>
+    {% endif %}
+  </form>
+</div>
+{% endblock %}

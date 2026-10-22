@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Resumes — JobTrackr{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Your resumes</h1>
+  <a class="btn" href="{% url 'resume_upload' %}">+ Upload resume</a>
+</div>
+
+{% if resumes %}
+  <div class="table-wrap">
+    <table class="table">
+      <thead><tr><th>Title</th><th>Uploaded</th><th>Preview</th><th></th></tr></thead>
+      <tbody>
+        {% for r in resumes %}
+        <tr>
+          <td><strong>{{ r.title }}</strong></td>
+          <td class="muted small">{{ r.created_at|date:"M j, Y" }}</td>
+          <td class="muted small">{{ r.extracted_text|truncatechars:60 }}</td>
+          <td class="text-right">
+            <form class="inline-form" method="post" action="{% url 'resume_delete' r.pk %}">
+              {% csrf_token %}
+              <button class="linkbtn" style="color:var(--red);" type="submit"
+                      onclick="return confirm('Delete this resume?')">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <div class="card">
+    <p class="muted">No resumes yet. Upload one to start generating tailored cover letters.</p>
+    <a class="btn" href="{% url 'resume_upload' %}">Upload your resume</a>
+  </div>
+{% endif %}
+{% endblock %}

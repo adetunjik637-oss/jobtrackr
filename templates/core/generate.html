@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Generate cover letter — JobTrackr{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>New cover letter</h1>
+  {% if letters_remaining != None %}
+    <span class="muted">{{ letters_remaining }} free letter{{ letters_remaining|pluralize }} left</span>
+  {% endif %}
+</div>
+
+<div class="card" style="max-width:680px;">
+  <form method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <p>
+      {{ form.resume.label_tag }}
+      {{ form.resume }}
+      {{ form.resume.errors }}
+    </p>
+    <div class="grid grid-2">
+      <p>{{ form.company_name.label_tag }} {{ form.company_name }} {{ form.company_name.errors }}</p>
+      <p>{{ form.job_title.label_tag }} {{ form.job_title }} {{ form.job_title.errors }}</p>
+    </div>
+    <p>{{ form.job_link.label_tag }} {{ form.job_link }} {{ form.job_link.errors }}</p>
+    <p>
+      {{ form.job_description.label_tag }}
+      {{ form.job_description }}
+      <span class="form-help">{{ form.job_description.help_text }}</span>
+      {{ form.job_description.errors }}
+    </p>
+    <p>{{ form.tone.label_tag }} {{ form.tone }}</p>
+    <p class="checkbox-row">{{ form.save_application }} {{ form.save_application.label_tag }}</p>
+    <button class="btn btn-block" type="submit">Generate cover letter</button>
+    <p class="muted small" style="margin-top:10px;">This may take a few seconds while the AI writes your letter.</p>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}JobTrackr — AI cover letters &amp; application tracking{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Land more interviews, with less busywork.</h1>
+  <p>JobTrackr writes a tailored cover letter from your resume and the job post in seconds — then tracks every application in one place.</p>
+  <div class="cta">
+    <a class="btn" href="{% url 'signup' %}">Start free — {{ FREE_MONTHLY_LETTERS }} letters/month</a>
+    <a class="btn btn-ghost" href="{% url 'pricing' %}">See pricing</a>
+  </div>
+</section>
+
+<div class="feature-row">
+  <div class="card">
+    <h3>Cover letters in seconds</h3>
+    <p class="muted">Upload your resume, paste a job link or description, pick a tone. Get a letter written for that exact role.</p>
+  </div>
+  <div class="card">
+    <h3>One place for every application</h3>
+    <p class="muted">Log each job with its status and follow-up date. Never lose track of where you applied.</p>
+  </div>
+  <div class="card">
+    <h3>Priced for everyone</h3>
+    <p class="muted">₦{{ PRICE_NGN }}/month in Nigeria, ${{ PRICE_USD }}/month internationally. Cancel anytime.</p>
+  </div>
+</div>
+
+<div class="card" style="text-align:center;">
+  <h2>Ready to apply smarter?</h2>
+  <p class="muted">Create a free account and generate your first letter now.</p>
+  <a class="btn" href="{% url 'signup' %}">Get started</a>
+</div>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Pricing — JobTrackr{% endblock %}
+{% block content %}
+<div class="page-head" style="justify-content:center;text-align:center;flex-direction:column;">
+  <h1>Simple pricing</h1>
+  <p class="muted">Start free. Upgrade when you're applying seriously.</p>
+</div>
+
+<div class="price-grid">
+  <div class="card price-card">
+    <h2>Free</h2>
+    <div class="amount">₦0</div>
+    <div class="per">forever</div>
+    <ul>
+      <li>{{ FREE_MONTHLY_LETTERS }} cover letters / month</li>
+      <li>Application tracker</li>
+      <li>1 saved resume</li>
+      <li>Download as text</li>
+    </ul>
+    {% if user.is_authenticated %}
+      <a class="btn btn-ghost btn-block" href="{% url 'dashboard' %}">Go to dashboard</a>
+    {% else %}
+      <a class="btn btn-ghost btn-block" href="{% url 'signup' %}">Start free</a>
+    {% endif %}
+  </div>
+
+  <div class="card price-card">
+    <span class="badge-pop">Most popular</span>
+    <h2>Pro</h2>
+    <div class="amount">₦{{ PRICE_NGN }}</div>
+    <div class="per">per month · ${{ PRICE_USD }} international</div>
+    <ul>
+      <li><strong>Unlimited</strong> cover letters</li>
+      <li>Multiple saved resumes</li>
+      <li>Tone options (formal, enthusiastic, concise)</li>
+      <li>Follow-up reminders</li>
+      <li>Export applications to CSV</li>
+    </ul>
+    {% if user.is_authenticated %}
+      {% if user.profile.is_subscribed %}
+        <button class="btn btn-block" disabled>You're on Pro ✓</button>
+      {% else %}
+        <form method="post" action="{% url 'billing_subscribe' %}" class="stack">
+          {% csrf_token %}
+          <label for="currency">Currency</label>
+          <select name="currency" id="currency">
+            <option value="NGN">₦ Naira — ₦{{ PRICE_NGN }}/mo</option>
+            <option value="USD">$ USD — ${{ PRICE_USD }}/mo</option>
+          </select>
+          <button class="btn btn-block" type="submit">Subscribe with Paystack</button>
+        </form>
+      {% endif %}
+    {% else %}
+      <a class="btn btn-block" href="{% url 'signup' %}">Sign up to subscribe</a>
+    {% endif %}
+  </div>
+</div>
+<p class="muted small" style="text-align:center;margin-top:16px;">
+  Payments are processed securely by Paystack. Cancel anytime.
+</p>
+{% endblock %}

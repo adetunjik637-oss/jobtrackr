@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Cover letter — JobTrackr{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Your cover letter</h1>
+  <div class="row-actions">
+    <a class="btn btn-ghost btn-sm" href="{% url 'letter_download' letter.pk %}">Download .txt</a>
+    <a class="btn btn-ghost btn-sm" href="{% url 'generate_letter' %}">+ Another</a>
+  </div>
+</div>
+
+{% if letter.job_application %}
+  <p class="muted">For <strong>{{ letter.job_application.job_title }}</strong> at
+    <strong>{{ letter.job_application.company_name }}</strong> ·
+    <a class="plain" href="{% url 'application_detail' letter.job_application.pk %}">view application</a></p>
+{% endif %}
+
+<div class="card">
+  <form method="post">
+    {% csrf_token %}
+    <label for="content">Edit before you send</label>
+    <textarea class="letter-text" id="content" name="content">{{ letter.content }}</textarea>
+    <div class="row-actions" style="margin-top:14px;">
+      <button class="btn" type="submit">Save changes</button>
+    </div>
+  </form>
+</div>
+<a class="plain" href="{% url 'letter_list' %}">← All letters</a>
+{% endblock %}

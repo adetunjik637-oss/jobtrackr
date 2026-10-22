@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — JobTrackr{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Hi, {{ profile.full_name|default:user.username }}</h1>
+  <a class="btn" href="{% url 'generate_letter' %}">+ New cover letter</a>
+</div>
+
+<div class="card" style="display:flex;align-items:center;justify-content:space-between;">
+  <div>
+    <strong>Plan:</strong>
+    {% if profile.is_subscribed %}
+      <span class="pill pill-green">Active</span> — unlimited letters
+      {% if profile.subscription_expiry %}<span class="muted small">· renews {{ profile.subscription_expiry }}</span>{% endif %}
+    {% else %}
+      <span class="pill pill-slate">Free</span> —
+      <strong>{{ letters_remaining }}</strong> of {{ FREE_MONTHLY_LETTERS }} letters left this month
+    {% endif %}
+  </div>
+  {% if not profile.is_subscribed %}
+    <a class="btn btn-sm" href="{% url 'pricing' %}">Upgrade</a>
+  {% endif %}
+</div>
+
+<div class="grid grid-3" style="margin-bottom:20px;">
+  <div class="stat"><div class="num">{{ total_apps }}</div><div class="label">Applications</div></div>
+  <div class="stat"><div class="num">{{ resume_count }}</div><div class="label">Resumes</div></div>
+  <div class="stat">
+    <div class="num">{% if letters_remaining == None %}&infin;{% else %}{{ letters_remaining }}{% endif %}</div>
+    <div class="label">Letters left</div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Application status</h2>
+  <div class="grid grid-5">
+    {% for value, label, count in status_summary %}
+      <div class="stat">
+        <div class="num">{{ count }}</div>
+        <div class="label">{{ label }}</div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="card">
+  <div class="page-head" style="margin:0 0 12px;">
+    <h2 style="margin:0;">Recent applications</h2>
+    <a class="plain small" href="{% url 'application_list' %}">View all →</a>
+  </div>
+  {% if recent_apps %}
+    <div class="table-wrap">
+      <table class="table">
+        <thead><tr><th>Role</th><th>Company</th><th>Status</th><th>Updated</th></tr></thead>
+        <tbody>
+          {% for app in recent_apps %}
+          <tr>
+            <td><a class="plain" href="{% url 'application_detail' app.pk %}">{{ app.job_title }}</a></td>
+            <td>{{ app.company_name }}</td>
+            <td><span class="pill pill-{{ app.status_color }}">{{ app.get_status_display }}</span></td>
+            <td class="muted small">{{ app.updated_at|date:"M j" }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="muted">No applications yet. <a class="plain" href="{% url 'generate_letter' %}">Generate your first cover letter</a> to get started.</p>
+  {% endif %}
+</div>
+{% endblock %}

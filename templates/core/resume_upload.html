@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Upload resume — JobTrackr{% endblock %}
+{% block content %}
+<div class="page-head"><h1>Upload a resume</h1></div>
+<div class="card" style="max-width:560px;">
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <p class="muted small">Accepted formats: PDF, DOCX, TXT (max 5 MB). We read the text to tailor your letters.</p>
+    <button class="btn btn-block" type="submit">Upload</button>
+  </form>
+</div>
+<a class="plain" href="{% url 'resume_list' %}">← Back to resumes</a>
+{% endblock %}

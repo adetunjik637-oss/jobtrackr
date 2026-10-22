@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Log in — JobTrackr{% endblock %}
+{% block content %}
+<div class="page-head"><h1>Log in</h1></div>
+<div class="card" style="max-width:440px;">
+  {% if form.errors %}
+    <div class="flash flash-error">Your username and password didn't match. Please try again.</div>
+  {% endif %}
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn btn-block" type="submit">Log in</button>
+  </form>
+  <p class="muted small" style="margin-top:16px;">
+    No account? <a class="plain" href="{% url 'signup' %}">Sign up free</a>.
+  </p>
+</div>
+{% endblock %}

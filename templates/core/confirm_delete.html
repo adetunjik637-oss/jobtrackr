@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Confirm delete — JobTrackr{% endblock %}
+{% block content %}
+<div class="page-head"><h1>Delete {{ kind }}?</h1></div>
+<div class="card" style="max-width:480px;">
+  <p>Are you sure you want to delete <strong>{{ object }}</strong>? This cannot be undone.</p>
+  <form method="post">
+    {% csrf_token %}
+    <div class="row-actions">
+      <button class="btn btn-danger" type="submit">Yes, delete</button>
+      <a class="btn btn-ghost" href="javascript:history.back()">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

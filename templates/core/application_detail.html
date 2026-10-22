@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}{{ application.job_title }} — JobTrackr{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>{{ application.job_title }}</h1>
+  <div class="row-actions">
+    <a class="btn btn-ghost btn-sm" href="{% url 'application_edit' application.pk %}">Edit</a>
+    <form class="inline-form" method="post" action="{% url 'application_delete' application.pk %}">
+      {% csrf_token %}
+      <button class="btn btn-danger btn-sm" type="submit" onclick="return confirm('Delete this application?')">Delete</button>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <p><strong>Company:</strong> {{ application.company_name }}</p>
+  <p><strong>Status:</strong> <span class="pill pill-{{ application.status_color }}">{{ application.get_status_display }}</span></p>
+  {% if application.job_link %}
+    <p><strong>Link:</strong> <a class="plain" href="{{ application.job_link }}" target="_blank" rel="noopener">{{ application.job_link }}</a></p>
+  {% endif %}
+  {% if application.follow_up_date %}
+    <p><strong>Follow up:</strong> {{ application.follow_up_date|date:"M j, Y" }}</p>
+  {% endif %}
+  <p class="muted small">Added {{ application.created_at|date:"M j, Y" }} · Updated {{ application.updated_at|date:"M j, Y" }}</p>
+</div>
+
+{% if application.job_description %}
+<div class="card">
+  <h2>Job description</h2>
+  <p style="white-space:pre-wrap;">{{ application.job_description }}</p>
+</div>
+{% endif %}
+
+{% if application.cover_letters.all %}
+<div class="card">
+  <h2>Cover letters</h2>
+  <ul class="stack">
+    {% for l in application.cover_letters.all %}
+      <li><a class="plain" href="{% url 'letter_detail' l.pk %}">{{ l.get_tone_display }} letter · {{ l.created_at|date:"M j, Y" }}</a></li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+<a class="plain" href="{% url 'application_list' %}">← Back to tracker</a>
+{% endblock %}
